@@ -1,18 +1,3 @@
-/* -*- Mode:C++; c-file-style:"gnu"; indent-tabs-mode:nil; -*- */
-/*
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */
 
 #include "ns3/core-module.h"
 #include "ns3/network-module.h"
@@ -25,50 +10,28 @@ using namespace ns3;
 
 NS_LOG_COMPONENT_DEFINE ("FirstScript");
 
-int main ()
-{
+int main () {
   int  node = 2;
   LogComponentEnable("UdpEchoClientApplication", LOG_LEVEL_INFO);
   LogComponentEnable("UdpEchoServerApplication", LOG_LEVEL_INFO);
 
-  /*
-    Creating nodes for point to point
-  */
   NodeContainer nodes;
   nodes.Create (node);
 
-  /*
-    Creating point to point helper
-  */
   PointToPointHelper pointToPoint;
   pointToPoint.SetDeviceAttribute("DataRate", StringValue("5Mbps"));
   pointToPoint.SetChannelAttribute("Delay", StringValue("2ms"));
 
-  /*
-    Installing net deivice to nodes
-    Can use PointToPointHelper or CsmaHelper classes
-  */
   NetDeviceContainer device;
   device = pointToPoint.Install(nodes);
 
-  /*
-    Installing protocol stack
-  */
   InternetStackHelper internet;
   internet.Install(nodes);
 
-  /*
-    Creating an IP address
-  */
   Ipv4AddressHelper ipv4;
   ipv4.SetBase("10.1.1.0", "255.255.255.0");
 
-  /*
-    Assigning an IP address
-  */
   Ipv4InterfaceContainer interface = ipv4.Assign(device);
-
-  // Creating topology is done
 
   UdpEchoServerHelper server(10);
 

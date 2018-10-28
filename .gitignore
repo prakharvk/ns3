@@ -58,7 +58,7 @@ Makefile
 README
 RELEASE_NOTES
 VERSION
-first.xml
+*.xml
 testpy.supp
 waf
 waf.bat
