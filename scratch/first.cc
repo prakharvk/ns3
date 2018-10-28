@@ -11,7 +11,7 @@ using namespace ns3;
 NS_LOG_COMPONENT_DEFINE ("FirstScript");
 
 int main () {
-  int  node = 2;
+  int node = 2;
   LogComponentEnable("UdpEchoClientApplication", LOG_LEVEL_INFO);
   LogComponentEnable("UdpEchoServerApplication", LOG_LEVEL_INFO);
 
