@@ -3,7 +3,7 @@
 #include <sys/socket.h>
 #include <errno.h>
 #include <netinet/in.h>
-#include <usistd.h>
+#include <unistd.h>
 
 using namespace std;
 
@@ -13,7 +13,7 @@ int main()
   unsigned int length = sizeof(struct sockaddr_in);
   struct sockaddr_in client, server;
 
-  if ((ssock = socket(AF_INET, SOCKET_STREAM, 0)) == -1)
+  if ((ssock = socket(AF_INET, SOCK_STREAM, 0)) == -1)
   {
     perror("socket creation falied");
     exit(-1);
@@ -31,12 +31,11 @@ int main()
     exit(-1);
   }
 
-  if ((listen(ssock, 5) == -1)
+  if (listen(ssock, 5) == -1)
   {
     perror("listen failed");
     exit(-1);
   }
-
 
   if ((csock = accept(ssock, (struct sockaddr *)&client, &length)) == -1)
   {
@@ -44,9 +43,22 @@ int main()
     exit(-1);
   }
 
-  while(1) {
+  char buffer[100];
+  FILE *fp;
+  int c;
 
-  }
+  recv(csock, &buffer, sizeof(buffer), 0);
+  printf("%s", buffer);
+  fp = fopen("data.txt", "a");
+  fprintf(fp, "%s", buffer);
+
+  if (fp == NULL)
+    c = -1;
+  else
+    c = 1;
+  printf("\nthe file was received successfully\n");
+  printf("the new file created is data.txt\n");
+  send(csock, &c, sizeof(c), 0);
 
   return 0;
 }

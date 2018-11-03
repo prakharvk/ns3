@@ -2,7 +2,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <usistd.h>
+#include <unistd.h>
 #include <errno.h>
 
 using namespace std;
@@ -24,26 +24,24 @@ int main()
 
   bzero(&client.sin_zero, 0);
 
-  if ((conect(sock, (struct sockaddr *)&client, length)) == -1)
+  if ((connect(sock, (struct sockaddr *)&client, length)) == -1)
   {
     perror("connection falied");
     exit(-1);
   }
 
-  while (1)
-  {
-    FILE *f;
-    char s[100];
-    cout << "Please enter file name : ";
-    cim >> s;
-    f = fopen(s, "r");
-    if (f == 0)
-    {
-      cout << "file can't be opend" << endl;
-      exit(-1);
-    }
-    x = fgetc(f);
-  }
+  char buffer[100];
+  FILE *f;
+  int c, n;
+  f = fopen("file.txt", "r");
+  fscanf(f, "%[^\n]", buffer);
+  send(sock, &buffer, sizeof(buffer), 0);
+  recv(sock, &c, sizeof(c), 0);
+  printf("%s\n", buffer);
+  if (c == 1)
+    cout << " File uploaded on server successfully" << endl;
+  else
+    cout << "file uploading failed :" << endl;
 
   return 0;
 }
